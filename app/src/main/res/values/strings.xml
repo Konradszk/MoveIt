@@ -6,6 +6,8 @@
     <string name="title_info">Info</string>
     <string name="title_events">Events</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="notification_channel_default_id">default</string>
+    <string name="notification_channel_default_name">Domyślne</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="push_notification">Push notification</string>
 </resources>

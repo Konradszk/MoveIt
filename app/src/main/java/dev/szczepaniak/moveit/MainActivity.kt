@@ -7,9 +7,13 @@ import android.view.MenuItem
 import dev.szczepaniak.moveit.fragments.DashboardFragment
 import dev.szczepaniak.moveit.fragments.EventFragment
 import dev.szczepaniak.moveit.fragments.InfoFragment
+import dev.szczepaniak.moveit.utils.NotificationFactory
 import kotlinx.android.synthetic.main.activity_main.*
+import logd
 
 class MainActivity : AppCompatActivity() {
+
+    private val notificationFactory by lazy { NotificationFactory() }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,28 +21,32 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         navigation.setOnNavigationItemSelectedListener { changePage(item = it) }
+        notificationFactory.createNotificationChannels(context = this)
+        cardNavigation(savedInstanceState)
+    }
 
-        if (savedInstanceState == null) {
+    private fun cardNavigation(savedInstanceState: Bundle?) {
+        if (savedInstanceState == null && intent.getStringExtra("CARD_NAME") == null) {
             changePage(navigation.menu.findItem(R.id.navigation_dashboard))
             navigation.selectedItemId = R.id.navigation_dashboard
+        } else if (intent.getStringExtra("CARD_NAME") == "EVENTS") {
+            changePage(navigation.menu.findItem(R.id.navigation_event))
+            navigation.selectedItemId = R.id.navigation_event
         }
     }
 
     private fun changePage(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.navigation_info -> {
-                message.setText(R.string.title_home)
                 supportActionBar!!.title = "Move It - Info"
                 showPage(InfoFragment.create())
             }
             R.id.navigation_dashboard -> {
-                message.setText(R.string.title_dashboard)
                 supportActionBar!!.title = "Move It - Dashboard"
                 showPage(DashboardFragment.create())
             }
             R.id.navigation_event -> {
                 supportActionBar!!.title = "Move It - Events"
-                message.setText(R.string.title_notifications)
                 showPage(EventFragment.create())
             }
             else -> return false
