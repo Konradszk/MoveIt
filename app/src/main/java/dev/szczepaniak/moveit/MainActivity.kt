@@ -9,7 +9,7 @@ import dev.szczepaniak.moveit.fragments.EventFragment
 import dev.szczepaniak.moveit.fragments.InfoFragment
 import dev.szczepaniak.moveit.utils.NotificationFactory
 import kotlinx.android.synthetic.main.activity_main.*
-import logd
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -59,4 +59,5 @@ class MainActivity : AppCompatActivity() {
             .replace(R.id.fragment_container, fragment)
             .commit()
     }
+
 }
