@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import logd
@@ -32,7 +33,13 @@ class EventFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         setupPermissions()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context!!)
-        fusedLocationClient.lastLocation.logi(TAG)
+        fusedLocationClient.lastLocation.addOnSuccessListener {
+            if (it != null) {
+                val wayLatitude = it.latitude
+                val wayLongitude = it.longitude
+                Toast.makeText(context, wayLatitude.toString() + wayLongitude, Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun setupPermissions() {
