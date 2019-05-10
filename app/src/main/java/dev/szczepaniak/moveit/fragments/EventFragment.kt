@@ -11,10 +11,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import dev.szczepaniak.moveit.controller.AlarmController
 import dev.szczepaniak.moveit.presenters.EventProvider
 import dev.szczepaniak.moveit.presenters.LocationProvider
 import logd
-import me.everything.providers.android.calendar.CalendarProvider
 
 
 const val RECORD_REQUEST_CODE = 101
@@ -26,6 +26,8 @@ class EventFragment : Fragment() {
 
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private val alarmController: AlarmController by lazy { AlarmController(context!!)}
+    private val eventProvider: EventProvider by lazy { EventProvider(context!!) }
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
@@ -36,7 +38,7 @@ class EventFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         LocationProvider.setUpPermission(context!!,activity!!)
         EventProvider.setUpPermission(context!!,activity!!)
-        LocationProvider().getUserLocation()
+//        LocationProvider().getUserLocation()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context!!)
         fusedLocationClient.lastLocation.addOnSuccessListener {
             if (it != null) {
@@ -44,10 +46,10 @@ class EventFragment : Fragment() {
                 val wayLongitude = it.longitude
                 Toast.makeText(context, wayLatitude.toString() + wayLongitude, Toast.LENGTH_SHORT).show()
             }
+
         }
-        val provider = CalendarProvider(context)
-        val calendarId = provider.calendars.list.forEach { it.name.logd(TAG) }
-        provider.getEvents(3).list.forEach{ it.logd(TAG)}
+        val time = java.util.Calendar.getInstance().time
+        this.eventProvider.getEvents(time)?.forEach { it.logd(TAG) }
 
     }
 
