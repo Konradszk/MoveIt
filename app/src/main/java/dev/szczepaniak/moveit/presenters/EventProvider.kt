@@ -21,17 +21,25 @@ class EventProvider(context: Context) {
     fun getEvents(fromTime: Date? = null): List<Event>? {
         return this.userCalendarId?.let {
             this.calendarProvider.getEvents(it).list
-                .filter {
-                    event -> if(fromTime!= null) event.dTStart > fromTime.time else true
+                .filter { event ->
+                    if (fromTime != null) event.dTStart > fromTime.time else true
                 }
-                .map { event -> Event(
-                    event.id,
-                    event.title,
-                    listOf("test1", "test2"),  // todo podmmienic na metode
-                    event.eventLocation,
-                    Date(event.dTStart* 1000L),
-                    Date(event.dTend* 1000L) ) }
+                .map { event ->
+                    Event(
+                        event.id,
+                        event.title,
+                        this.getParticipants(event.id),
+                        event.eventLocation,
+                        Date(event.dTStart * 1000L),
+                        Date(event.dTend * 1000L)
+                    )
+                }
         }
+    }
+
+    private fun getParticipants(eventId: Long): List<String> {
+        return this.calendarProvider.getAttendees(eventId)
+            .list.map { attendee -> attendee.email }
     }
 
 

@@ -46,10 +46,16 @@ class NotificationFactory {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun createNotificationChannels(context: Context) {
-        val channelId = context.getString(R.string.notification_channel_default_id)
-        val channelName = context.getString(R.string.notification_channel_default_name)
-        NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT)
+        val channelDefaultId = context.getString(R.string.notification_channel_default_id)
+        val channelDefaultName = context.getString(R.string.notification_channel_default_name)
+
+        val channelLocationId = context.getString(R.string.notification_channel_location_id)
+        val channelLocationName = context.getString(R.string.notification_channel_location_name)
+
+        NotificationChannel(channelDefaultId, channelDefaultName, NotificationManager.IMPORTANCE_DEFAULT)
             .let { context.notificationManager?.createNotificationChannel(it) }
+        NotificationChannel(channelLocationId,channelLocationName,NotificationManager.IMPORTANCE_MIN)
+            .let {context.notificationManager?.createNotificationChannel(it)}
     }
 
     private val Context.notificationManager: NotificationManager?

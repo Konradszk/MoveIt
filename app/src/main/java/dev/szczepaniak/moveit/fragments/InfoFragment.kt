@@ -8,13 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import dev.szczepaniak.moveit.R
+import dev.szczepaniak.moveit.controller.AlarmController
 import dev.szczepaniak.moveit.utils.NotificationFactory
 import kotlinx.android.synthetic.main.info_layout.*
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 class InfoFragment : Fragment() {
 
     private val notificationFactory by lazy { NotificationFactory() }
+    private val alarmController: AlarmController by lazy { AlarmController(context!!) }
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
@@ -27,6 +31,9 @@ class InfoFragment : Fragment() {
             toast.setGravity(Gravity.BOTTOM,0,200)
             toast.show()
             notificationFactory.show(context!!, "test", "srawdzam", "EVENTS")
+        }
+        set_alarm.setOnClickListener {
+            alarmController.addAlarm(Date(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(20)))
         }
     }
 
