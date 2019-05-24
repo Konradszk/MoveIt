@@ -14,11 +14,11 @@ class AlarmController(private val context: Context) {
 
     private val alarmManager: AlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-    fun addAlarm(wakeUpTime: Date){
+    fun addAlarm(wakeUpTime: Date, address: String){
         Intent(context, LocationProvider::class.java)
-            .apply { action = "LOCATION_CHECK" }
+            .apply { action = address }
             .let {
-                PendingIntent.getService(context, 0, it, 0)
+              PendingIntent.getService(context, 0, it, 0)
             }
             .let{
                 fromAndroid(Build.VERSION_CODES.N) {

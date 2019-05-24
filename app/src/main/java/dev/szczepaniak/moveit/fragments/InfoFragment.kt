@@ -38,12 +38,13 @@ class InfoFragment : Fragment() {
             notificationFactory.show(context!!, "test", "srawdzam", "EVENTS")
         }
         set_alarm.setOnClickListener {
-            alarmController.addAlarm(Date(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(20)))
+            alarmController.addAlarm(Date(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(20)),
+                "Pizza Hut Zodiak, Widok 26, 00-023 Warszawa, Poland")
         }
 
         get_location.setOnClickListener {
             val coder = Geocoder(context)
-            var address: List<Address>
+            val address: List<Address>
             try {
                 address = coder.getFromLocationName("Pizza Hut Zodiak, Widok 26, 00-023 Warszawa, Poland", 5)
                 if (address != null) {

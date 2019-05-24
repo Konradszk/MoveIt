@@ -53,14 +53,14 @@ class LocationProvider : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        checkIsNextToEvent()
+        checkIsNextToEvent(intent!!.action!!)
         return super.onStartCommand(intent, flags, startId)
     }
 
-    private fun checkIsNextToEvent() {
+    private fun checkIsNextToEvent(addressLocationString: String) {
         getUserLocation {
             it.logd(TAG)
-            val addressLocation = getPlaceLocation("Pizza Hut Zodiak, Widok 26, 00-023 Warszawa, Poland")
+            val addressLocation = getPlaceLocation(addressLocationString)
             addressLocation?.logd(TAG)
             if (addressLocation != null) {
                 if (!checkNearbyCondition(it, addressLocation)) {
