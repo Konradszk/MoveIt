@@ -26,7 +26,7 @@ class EventFragment : Fragment() {
 
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private val alarmController: AlarmController by lazy { AlarmController(context!!)}
+    private val alarmController: AlarmController by lazy { AlarmController(context!!) }
     private val eventProvider: EventProvider by lazy { EventProvider(context!!) }
 
 
@@ -36,18 +36,18 @@ class EventFragment : Fragment() {
     @SuppressLint("MissingPermission")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        LocationProvider.setUpPermission(context!!,activity!!)
-        EventProvider.setUpPermission(context!!,activity!!)
+        LocationProvider.setUpPermission(context!!, activity!!)
+        EventProvider.setUpPermission(context!!, activity!!)
 //        LocationProvider().getUserLocation()
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context!!)
-        fusedLocationClient.lastLocation.addOnSuccessListener {
-            if (it != null) {
-                val wayLatitude = it.latitude
-                val wayLongitude = it.longitude
-                Toast.makeText(context, wayLatitude.toString() + wayLongitude, Toast.LENGTH_SHORT).show()
-            }
+//        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context!!)
+//        fusedLocationClient.lastLocation.addOnSuccessListener {
+//            if (it != null) {
+//                val wayLatitude = it.latitude
+//                val wayLongitude = it.longitude
+//                Toast.makeText(context, wayLatitude.toString() + wayLongitude, Toast.LENGTH_SHORT).show()
+//            }
 
-        }
+//        }
         val time = java.util.Calendar.getInstance().time
         this.eventProvider.getEvents(time)?.forEach { it.logd(TAG) }
 

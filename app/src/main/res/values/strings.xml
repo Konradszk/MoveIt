@@ -13,4 +13,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="push_notification">Push notification</string>
     <string name="set_alarm">set alarm</string>
+    <string name="get_location">Get Location</string>
 </resources>
