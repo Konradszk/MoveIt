@@ -14,4 +14,6 @@
     <string name="push_notification">Push notification</string>
     <string name="set_alarm">set alarm</string>
     <string name="get_location">Get Location</string>
+    <string name="move_event">move event</string>
+    <string name="send_email">send email</string>
 </resources>

@@ -2,6 +2,7 @@ package dev.szczepaniak.moveit.presenters
 
 import android.Manifest
 import android.app.Activity
+import android.arch.lifecycle.ViewModel
 import android.content.Context
 import android.content.pm.PackageManager
 import android.support.v4.app.ActivityCompat
@@ -11,7 +12,7 @@ import me.everything.providers.android.calendar.CalendarProvider
 
 import java.util.*
 
-class EventProvider(context: Context) {
+class EventProvider(context: Context): ViewModel() {
 
     private val calendarProvider = CalendarProvider(context)
     private val userCalendarId = this.calendarProvider.calendars.list
