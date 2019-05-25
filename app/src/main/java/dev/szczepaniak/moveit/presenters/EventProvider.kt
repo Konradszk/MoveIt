@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModel
 import android.content.Context
 import android.content.pm.PackageManager
 import android.support.v4.app.ActivityCompat
+import android.widget.Toast
 import dev.szczepaniak.moveit.model.Event
 import logd
 import me.everything.providers.android.calendar.CalendarProvider
@@ -15,6 +16,7 @@ import java.util.*
 class EventProvider(context: Context): ViewModel() {
 
     private val calendarProvider = CalendarProvider(context)
+    private val toast = Toast.makeText(context, "Move it", Toast.LENGTH_SHORT)
     private val userCalendarId = this.calendarProvider.calendars.list
         .find { calendar -> calendar.ownerAccount.endsWith("@gmail.com") }?.id
 
@@ -42,6 +44,11 @@ class EventProvider(context: Context): ViewModel() {
         return this.calendarProvider.getAttendees(eventId)
             .list.map { attendee -> attendee.email }
     }
+
+    fun test(){
+        toast.show()
+    }
+
 
 
     companion object {
