@@ -11,7 +11,7 @@ import android.os.Build
 import android.support.annotation.RequiresApi
 import android.support.annotation.StringRes
 import android.support.v4.app.NotificationCompat
-import dev.szczepaniak.moveit.MainActivity
+import dev.szczepaniak.moveit.activities.MainActivity
 import dev.szczepaniak.moveit.R
 import java.util.*
 

@@ -1,9 +1,10 @@
-package dev.szczepaniak.moveit
+package dev.szczepaniak.moveit.activities
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import dev.szczepaniak.moveit.R
 import dev.szczepaniak.moveit.fragments.DashboardFragment
 import dev.szczepaniak.moveit.fragments.EventFragment
 import dev.szczepaniak.moveit.fragments.InfoFragment

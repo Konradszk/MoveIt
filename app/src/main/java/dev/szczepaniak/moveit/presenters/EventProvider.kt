@@ -13,7 +13,7 @@ import me.everything.providers.android.calendar.CalendarProvider
 
 import java.util.*
 
-class EventProvider(context: Context): ViewModel() {
+class EventProvider(context: Context) : ViewModel() {
 
     private val calendarProvider = CalendarProvider(context)
     private val toast = Toast.makeText(context, "Move it", Toast.LENGTH_SHORT)
@@ -23,7 +23,7 @@ class EventProvider(context: Context): ViewModel() {
 
     fun getEvents(fromTime: Date? = null): List<Event>? {
         return this.userCalendarId?.let {
-            this.calendarProvider.getEvents(it).list
+            val eventList = this.calendarProvider.getEvents(it).list
                 .filter { event ->
                     if (fromTime != null) event.dTStart > fromTime.time else true
                 }
@@ -34,10 +34,32 @@ class EventProvider(context: Context): ViewModel() {
                         this.getParticipants(event.id),
                         event.eventLocation,
                         Date(event.dTStart * 1000L),
-                        Date(event.dTend * 1000L)
+                        Date(event.dTend * 1000L),
+                        null
                     )
                 }
+
+            for (i in eventList.withIndex() ){
+                if(i.index!= eventList.lastIndex){
+                    i.value.nextEventId= eventList[i.index+1].id
+                }
+            }
+            eventList
         }
+    }
+
+    fun getEvent(idEvent: Long): Event {
+        val event = this.calendarProvider.getEvent(idEvent)
+
+        return Event(
+            event.id,
+            event.title,
+            emptyList(),
+            event.eventLocation,
+            Date(event.dTStart * 1000L),
+            Date(event.dTend * 1000L),
+            null
+        )
     }
 
     private fun getParticipants(eventId: Long): List<String> {
@@ -45,10 +67,9 @@ class EventProvider(context: Context): ViewModel() {
             .list.map { attendee -> attendee.email }
     }
 
-    fun test(){
+    fun test() {
         toast.show()
     }
-
 
 
     companion object {

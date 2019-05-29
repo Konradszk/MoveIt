@@ -8,5 +8,6 @@ data class Event(
     val participants: List<String>,
     val location: String,
     val startDate: Date,
-    val endDate: Date
+    val endDate: Date,
+    var nextEventId: Long?
 )
