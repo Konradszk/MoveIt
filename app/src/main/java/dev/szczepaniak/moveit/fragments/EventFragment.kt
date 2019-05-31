@@ -28,17 +28,19 @@ class EventFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
         inflater.inflate(dev.szczepaniak.moveit.R.layout.event_layout, container, false)
 
-    @SuppressLint("MissingPermission")
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onResume() {
         val time = java.util.Calendar.getInstance().time
-        recyclerView.adapter = adapter
         adapter.items = eventProvider.getEvents(time)!!
-        super.onActivityCreated(savedInstanceState)
-        LocationProvider.setUpPermission(context!!, activity!!)
-        EventProvider.setUpPermission(context!!, activity!!)
-
+        super.onResume()
     }
 
+    @SuppressLint("MissingPermission")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        LocationProvider.setUpPermission(context!!, activity!!)
+        EventProvider.setUpPermission(context!!, activity!!)
+        recyclerView.adapter = adapter
+        super.onActivityCreated(savedInstanceState)
+    }
 
     companion object {
         fun create(): EventFragment {

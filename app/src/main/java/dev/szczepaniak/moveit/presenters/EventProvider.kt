@@ -1,11 +1,16 @@
 package dev.szczepaniak.moveit.presenters
 
+
 import android.Manifest
 import android.app.Activity
 import android.arch.lifecycle.ViewModel
+import android.content.ContentUris
+import android.content.ContentValues
 import android.content.Context
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.support.v4.app.ActivityCompat
+import android.util.Log
 import android.widget.Toast
 import dev.szczepaniak.moveit.model.Event
 import logd
@@ -13,14 +18,7 @@ import me.everything.providers.android.calendar.CalendarProvider
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.ZoneId
-
-
 import java.util.*
-import android.provider.SyncStateContract.Helpers.update
-import android.content.ContentUris
-import android.content.ContentValues
-import android.net.Uri
-import android.util.Log
 
 
 class EventProvider(context: Context) : ViewModel() {
@@ -45,8 +43,8 @@ class EventProvider(context: Context) : ViewModel() {
                         event.title,
                         this.getParticipants(event.id),
                         event.eventLocation,
-                        Date(event.dTStart * 1000L),
-                        Date(event.dTend * 1000L),
+                        Date(event.dTStart ),
+                        Date(event.dTend),
                         null
                     )
                 }

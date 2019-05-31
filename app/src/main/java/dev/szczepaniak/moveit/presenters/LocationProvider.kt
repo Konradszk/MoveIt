@@ -58,9 +58,9 @@ class LocationProvider : Service() {
     }
 
     private fun checkIsNextToEvent(addressLocationString: String) {
-        getUserLocation {
+        getUserLocation(context = this) {
             it.logd(TAG)
-            val addressLocation = getPlaceLocation(addressLocationString)
+            val addressLocation = getPlaceLocation(addressLocationString, context = this)
             addressLocation?.logd(TAG)
             if (addressLocation != null) {
                 if (!checkNearbyCondition(it, addressLocation)) {
@@ -86,34 +86,6 @@ class LocationProvider : Service() {
         return null
     }
 
-
-    @SuppressLint("MissingPermission")
-    fun getUserLocation(callback: (LatLng) -> Unit) {
-        fusedLocationClient.lastLocation.addOnSuccessListener {
-            if (it != null) {
-                val wayLatitude = it.latitude
-                val wayLongitude = it.longitude
-                callback(LatLng(wayLatitude, wayLongitude))
-            }
-        }
-    }
-
-    private fun getPlaceLocation(address: String): LatLng? {
-        val addressList: List<Address>
-        val placeLocation: LatLng
-        try {
-            addressList = coder.getFromLocationName(address, 5)
-            if (addressList == null) {
-                return null
-            }
-            val location = addressList[0]
-            placeLocation = LatLng(location.latitude, location.longitude)
-            return placeLocation
-        } catch (ex: IOException) {
-            ex.loge(TAG)
-        }
-        return null
-    }
 
     private fun lat500m(): Double {
         val m = (1 / ((2 * Math.PI / 360) * EARTH_RADIUS_KM)) / 1000
@@ -148,5 +120,38 @@ class LocationProvider : Service() {
                 logd("TAG", format = { "LOCATION PERMISSION GRANTED" })
             }
         }
+
+        fun getPlaceLocation(address: String, context: Context): LatLng? {
+            val coder = Geocoder(context)
+            val addressList: List<Address>
+            val placeLocation: LatLng
+            try {
+                addressList = coder.getFromLocationName(address, 5)
+                if (addressList == null) {
+                    return null
+                }
+                val location = addressList[0]
+                placeLocation = LatLng(location.latitude, location.longitude)
+                return placeLocation
+            } catch (ex: IOException) {
+                ex.loge("MOVE_IT_LOCATION")
+            }
+            return null
+        }
+
+        @SuppressLint("MissingPermission")
+        fun getUserLocation(context: Context, callback: (LatLng) -> Unit) {
+            val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
+
+            fusedLocationClient.lastLocation.addOnSuccessListener {
+                if (it != null) {
+                    val wayLatitude = it.latitude
+                    val wayLongitude = it.longitude
+                    callback(LatLng(wayLatitude, wayLongitude))
+                }
+            }
+        }
     }
+
+
 }
