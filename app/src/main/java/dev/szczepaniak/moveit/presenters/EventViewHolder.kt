@@ -6,9 +6,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import dev.szczepaniak.moveit.activities.MoveEventActivity
 import dev.szczepaniak.moveit.model.Event
+import dev.szczepaniak.moveit.utils.dateToHourAndMinutes
 import kotlinx.android.synthetic.main.viewholder_event.view.*
-import java.text.SimpleDateFormat
-import java.util.*
 
 class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -31,8 +30,4 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
     }
 
-    private fun dateToHourAndMinutes(date: Date): String {
-        val dateFormat = SimpleDateFormat("hh:mm")
-        return dateFormat.format(date)
-    }
 }

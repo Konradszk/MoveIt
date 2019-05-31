@@ -10,10 +10,22 @@ import android.widget.Toast
 import dev.szczepaniak.moveit.model.Event
 import logd
 import me.everything.providers.android.calendar.CalendarProvider
+import java.time.Duration
+import java.time.LocalDateTime
+import java.time.ZoneId
+
 
 import java.util.*
+import android.provider.SyncStateContract.Helpers.update
+import android.content.ContentUris
+import android.content.ContentValues
+import android.net.Uri
+import android.util.Log
+
 
 class EventProvider(context: Context) : ViewModel() {
+    private val TAG = "MOVE_IT_EVENT_PR"
+    private val context = context
 
     private val calendarProvider = CalendarProvider(context)
     private val toast = Toast.makeText(context, "Move it", Toast.LENGTH_SHORT)
@@ -39,9 +51,9 @@ class EventProvider(context: Context) : ViewModel() {
                     )
                 }
 
-            for (i in eventList.withIndex() ){
-                if(i.index!= eventList.lastIndex){
-                    i.value.nextEventId= eventList[i.index+1].id
+            for (i in eventList.withIndex()) {
+                if (i.index != eventList.lastIndex) {
+                    i.value.nextEventId = eventList[i.index + 1].id
                 }
             }
             eventList
@@ -56,8 +68,8 @@ class EventProvider(context: Context) : ViewModel() {
             event.title,
             emptyList(),
             event.eventLocation,
-            Date(event.dTStart * 1000L),
-            Date(event.dTend * 1000L),
+            Date(event.dTStart),
+            Date(event.dTend),
             null
         )
     }
@@ -67,8 +79,52 @@ class EventProvider(context: Context) : ViewModel() {
             .list.map { attendee -> attendee.email }
     }
 
-    fun test() {
-        toast.show()
+    private fun eventDateUpdate(event: me.everything.providers.android.calendar.Event) {
+
+        var iNumRowsUpdated = 0
+
+        val data = ContentValues()
+
+        data.put("dTStart", event.dTStart)
+        data.put("dTend", event.dTend)
+        data.put("lastDate", event.dTend)
+
+        val eventsUri = Uri.parse("content://com.android.calendar/events")
+        val eventUri = ContentUris.withAppendedId(eventsUri, event.id)
+
+        iNumRowsUpdated = context.contentResolver.update(
+            eventUri, data,
+            null, null
+        )
+
+        Log.i(TAG, "Updated $iNumRowsUpdated calendar entry.")
+    }
+
+    fun moveEvent(eventId: Long, hour: Int, minute: Int) {
+        this.calendarProvider.getEvent(eventId).let {
+
+            val startTime = Date(it.dTStart)
+            val endTime = Date(it.dTend)
+            val calStart = Calendar.getInstance()
+            val calEnd = Calendar.getInstance()
+            calStart.time = startTime
+            calEnd.time = endTime
+            calStart.set(Calendar.HOUR, hour)
+            calStart.set(Calendar.MINUTE, minute)
+            calEnd.set(Calendar.HOUR, hour)
+            calEnd.set(Calendar.MINUTE, minute)
+
+
+            val startTimeLDT = LocalDateTime.ofInstant(startTime.toInstant(), ZoneId.of("UTC"))
+            val endTimeLDT = LocalDateTime.ofInstant(endTime.toInstant(), ZoneId.systemDefault())
+            val diff: Duration = Duration.between(startTimeLDT, endTimeLDT)
+            val diffMinutes = diff.toMinutes()
+            calEnd.add(Calendar.MINUTE, diffMinutes.toInt())
+            it.dTStart = (calStart.timeInMillis)
+            it.dTend = (calEnd.timeInMillis)
+            it.lastDate = (calEnd.timeInMillis)
+            this.eventDateUpdate(it)
+        }
     }
 
 
