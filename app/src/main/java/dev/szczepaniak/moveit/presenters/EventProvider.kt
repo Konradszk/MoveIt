@@ -125,6 +125,10 @@ class EventProvider(context: Context) : ViewModel() {
         }
     }
 
+    fun moveEventAI(eventId: Long, nextEventId: Long, selectedHour: Int, selectedMinute: Int, timeTravelSec: Any) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
 
     companion object {
         fun setUpPermission(context: Context, activity: Activity) {
