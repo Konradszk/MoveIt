@@ -21,7 +21,7 @@ class GeoDistanceProvider(private val mContext: Context, private val app: MoveEv
 
     private val TAG = "GEO_ASYNC"
     private val BASE_URL = "https://maps.googleapis.com/maps/api/distancematrix/json?"
-    private val API_KEY = "KEY"
+    private val API_KEY = ""
 
     private lateinit var progressDialog: AlertDialog
 
@@ -72,7 +72,8 @@ class GeoDistanceProvider(private val mContext: Context, private val app: MoveEv
         super.onPostExecute(result)
         progressDialog.dismiss()
         if(result!=null){
-            this.app.moveEventAI(result)
+            result.logd(TAG)
+            this.app.moveEventAI(result.toString())
         }
     }
 
@@ -93,5 +94,5 @@ class GeoDistanceProvider(private val mContext: Context, private val app: MoveEv
 }
 
 interface MoveEventI {
-    public fun moveEventAI(value: Any)
+    public fun moveEventAI(value: String)
 }

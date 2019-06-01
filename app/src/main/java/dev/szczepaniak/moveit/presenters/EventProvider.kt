@@ -22,6 +22,7 @@ import java.util.*
 
 
 class EventProvider(context: Context) : ViewModel() {
+    private val EXTRA_MINUTES: Int = 5 * 60
     private val TAG = "MOVE_IT_EVENT_PR"
     private val context = context
 
@@ -43,7 +44,7 @@ class EventProvider(context: Context) : ViewModel() {
                         event.title,
                         this.getParticipants(event.id),
                         event.eventLocation,
-                        Date(event.dTStart ),
+                        Date(event.dTStart),
                         Date(event.dTend),
                         null
                     )
@@ -113,7 +114,7 @@ class EventProvider(context: Context) : ViewModel() {
             calEnd.set(Calendar.MINUTE, minute)
 
 
-            val startTimeLDT = LocalDateTime.ofInstant(startTime.toInstant(), ZoneId.of("UTC"))
+            val startTimeLDT = LocalDateTime.ofInstant(startTime.toInstant(), ZoneId.systemDefault())
             val endTimeLDT = LocalDateTime.ofInstant(endTime.toInstant(), ZoneId.systemDefault())
             val diff: Duration = Duration.between(startTimeLDT, endTimeLDT)
             val diffMinutes = diff.toMinutes()
@@ -125,8 +126,40 @@ class EventProvider(context: Context) : ViewModel() {
         }
     }
 
-    fun moveEventAI(eventId: Long, nextEventId: Long, selectedHour: Int, selectedMinute: Int, timeTravelSec: Any) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    fun moveEventAI(event: Event, nextEvent: Event, selectedHour: Int, selectedMinute: Int, timeTravelSec: String) {
+        val calEndTimeEvent = Calendar.getInstance()
+        calEndTimeEvent.time = event.endDate
+        calEndTimeEvent.set(Calendar.HOUR, selectedHour)
+        calEndTimeEvent.set(Calendar.MINUTE, selectedMinute)
+
+        val endTimeEventLDT = LocalDateTime.ofInstant(calEndTimeEvent.time.toInstant(), ZoneId.systemDefault())
+        val startTimeNextEventLDT = LocalDateTime.ofInstant(nextEvent.startDate.toInstant(), ZoneId.systemDefault())
+        val diff = Duration.between(endTimeEventLDT, startTimeNextEventLDT)
+        if ((diff.toMinutes() * 60) < timeTravelSec.toInt()) {
+            val calStartTimeNextEvent = Calendar.getInstance()
+            calStartTimeNextEvent.time = nextEvent.startDate
+            calStartTimeNextEvent.add(Calendar.SECOND, timeTravelSec.toInt() + this.EXTRA_MINUTES)
+            this.moveEvent(
+                nextEvent.id,
+                calStartTimeNextEvent.get(Calendar.HOUR),
+                calStartTimeNextEvent.get(Calendar.MINUTE)
+            )
+
+            Toast.makeText(
+                context,
+                "Move ${nextEvent.name} on ${calStartTimeNextEvent.get(Calendar.HOUR)}:${calStartTimeNextEvent.get(Calendar.MINUTE)}",
+                Toast.LENGTH_LONG
+            ).show()
+
+        } else {
+            val timeTravelMin = timeTravelSec.toInt() / 60
+            Toast.makeText(
+                context,
+                "The is no reason to move event, travel time: $timeTravelMin min",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+
     }
 
 

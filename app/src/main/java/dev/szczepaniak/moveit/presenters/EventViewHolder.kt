@@ -16,11 +16,15 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         txtTitle.text = event.name
         txtStart.text = dateToHourAndMinutes(event.startDate)
         txtLocation.text = event.location
-        moveItBtn.setOnClickListener {
-            val intent = Intent(itemView.context, MoveEventActivity::class.java)
-            intent.putExtra("EVENT_ID", event.id)
-            intent.putExtra("NEXT_EVENT_ID", event.nextEventId)
-            this.context.startActivity(intent)
+        if (event.nextEventId != null) {
+            moveItBtn.setOnClickListener {
+                val intent = Intent(itemView.context, MoveEventActivity::class.java)
+                intent.putExtra("EVENT_ID", event.id)
+                intent.putExtra("NEXT_EVENT_ID", event.nextEventId!!)
+                this.context.startActivity(intent)
+            }
+        } else {
+            moveItBtn.visibility = View.GONE
         }
         sendEmailBtn.setOnClickListener {
             val emailIntent = Intent(Intent.ACTION_SENDTO)

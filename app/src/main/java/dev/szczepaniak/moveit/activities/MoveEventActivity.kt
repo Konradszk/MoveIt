@@ -107,24 +107,27 @@ class MoveEventActivity : AppCompatActivity(), MoveEventI {
     fun moveEvent(view: View) {
         if (this.mode == Mode.NORMAL) {
             this.eventProvider.moveEvent(nextEvent.id, this.selectedHour, this.selectedMinute)
+            this.finish()
         } else {
-            getUserLocation(applicationContext) {
+            if (::travelMode.isInitialized) {
+                val source = getPlaceLocation(event.location, context = applicationContext)
                 val destination = getPlaceLocation(nextEvent.location, context = applicationContext)
 
                 this.distanceProvider.execute(
-                    "${it.latitude},${it.longitude}",
+                    "${source?.latitude},${source?.longitude}",
                     "${destination?.latitude},${destination?.longitude}",
-                    "driving",
+                    this.travelMode.value,
                     "${event.endDate.time}"
                 )
+            } else {
+                Toast.makeText(applicationContext, "Select travel mode", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    override fun moveEventAI(value: Any) {
-        Toast.makeText(this, value.toString(), Toast.LENGTH_SHORT).show()
-        this.eventProvider.moveEventAI(this.event.id, this.nextEvent.id, this.selectedHour, this.selectedMinute, value)
-//        this.finish()
+    override fun moveEventAI(value: String) {
+        this.eventProvider.moveEventAI(this.event, this.nextEvent, this.selectedHour, this.selectedMinute, value)
+        this.finish()
     }
 
     fun selectTravelMode(view: View) {

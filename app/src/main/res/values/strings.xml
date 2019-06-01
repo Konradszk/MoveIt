@@ -18,7 +18,7 @@
     <string name="send_email">send email</string>
     <string name="manual">Manual</string>
     <string name="auto_move">Auto Move</string>
-    <string name="ai_move">AI move</string>
+    <string name="ai_move">Smart move</string>
     <string name="location">location</string>
     <string name="name">name</string>
     <string name="end_time">End time</string>
