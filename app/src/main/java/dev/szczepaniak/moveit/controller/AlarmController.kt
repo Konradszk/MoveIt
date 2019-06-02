@@ -14,24 +14,26 @@ class AlarmController(private val context: Context) {
 
     private val alarmManager: AlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-    fun addAlarm(wakeUpTime: Date, address: String){
+    fun addAlarm(wakeUpTime: Date, address: String) {
         Intent(context, LocationProvider::class.java)
             .apply { action = address }
             .let {
-              PendingIntent.getService(context, 0, it, 0)
+                PendingIntent.getForegroundService(context, 0, it, 0)
             }
-            .let{
+            .let {
                 fromAndroid(Build.VERSION_CODES.N) {
                     alarmManager.setExactAndAllowWhileIdle(
                         AlarmManager.RTC_WAKEUP,
                         wakeUpTime.time,
-                        it)
+                        it
+                    )
                 }
                 beforeAndroid(Build.VERSION_CODES.N) {
                     alarmManager.setExact(
                         AlarmManager.RTC_WAKEUP,
                         wakeUpTime.time,
-                        it)
+                        it
+                    )
                 }
             }
     }

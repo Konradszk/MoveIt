@@ -6,14 +6,12 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import dev.szczepaniak.moveit.controller.AlarmController
 import dev.szczepaniak.moveit.presenters.EventAdapter
 import dev.szczepaniak.moveit.presenters.EventProvider
 import dev.szczepaniak.moveit.presenters.LocationProvider
 import kotlinx.android.synthetic.main.event_layout.*
+import java.util.*
 
-
-const val RECORD_REQUEST_CODE = 101
 
 
 class EventFragment : Fragment() {
@@ -21,7 +19,6 @@ class EventFragment : Fragment() {
     private val TAG = "EVENT_FRAGMENT"
 
     private val adapter = EventAdapter()
-    private val alarmController: AlarmController by lazy { AlarmController(context!!) }
     private val eventProvider: EventProvider by lazy { EventProvider(context!!) }
 
 
@@ -29,7 +26,8 @@ class EventFragment : Fragment() {
         inflater.inflate(dev.szczepaniak.moveit.R.layout.event_layout, container, false)
 
     override fun onResume() {
-        val time = java.util.Calendar.getInstance().time
+        var time = java.util.Calendar.getInstance().time
+        time = Date.from(time.toInstant().minusSeconds(60L*15L))
         adapter.items = eventProvider.getEvents(time)!!
         super.onResume()
     }

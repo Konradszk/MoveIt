@@ -35,6 +35,7 @@ class EventProvider(context: Context) : ViewModel() {
     fun getEvents(fromTime: Date? = null): List<Event>? {
         return this.userCalendarId?.let {
             val eventList = this.calendarProvider.getEvents(it).list
+                .filter { event -> event.eventLocation!="" }
                 .filter { event ->
                     if (fromTime != null) event.dTStart > fromTime.time else true
                 }
@@ -48,8 +49,7 @@ class EventProvider(context: Context) : ViewModel() {
                         Date(event.dTend),
                         null
                     )
-                }
-
+                }.sortedBy { event -> event.startDate }
             for (i in eventList.withIndex()) {
                 if (i.index != eventList.lastIndex) {
                     i.value.nextEventId = eventList[i.index + 1].id
@@ -160,6 +160,14 @@ class EventProvider(context: Context) : ViewModel() {
             ).show()
         }
 
+    }
+
+    fun getMaxId(time: Date): Long? {
+        return this.userCalendarId?.let {
+            this.calendarProvider.getEvents(it).list
+                .filter { event -> event.dTStart > time.time  }
+                .maxBy { event -> event.id }?.id
+        }
     }
 
 

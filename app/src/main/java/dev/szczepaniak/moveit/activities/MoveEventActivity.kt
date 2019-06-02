@@ -3,7 +3,6 @@ package dev.szczepaniak.moveit.activities
 import android.app.TimePickerDialog
 import android.icu.util.Calendar
 import android.os.Bundle
-import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.ImageButton
@@ -13,7 +12,6 @@ import dev.szczepaniak.moveit.model.Event
 import dev.szczepaniak.moveit.presenters.EventProvider
 import dev.szczepaniak.moveit.presenters.GeoDistanceProvider
 import dev.szczepaniak.moveit.presenters.LocationProvider.Companion.getPlaceLocation
-import dev.szczepaniak.moveit.presenters.LocationProvider.Companion.getUserLocation
 import dev.szczepaniak.moveit.presenters.MoveEventI
 import dev.szczepaniak.moveit.utils.dateToHourAndMinutes
 import kotlinx.android.synthetic.main.activity_move_event.*

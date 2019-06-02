@@ -27,4 +27,8 @@
     <string name="choose_the_time_AI">Choose the end time of missed event</string>
     <string name="move_it_action">Move it!</string>
     <string name="info_move">Fill information below to move next event</string>
+    <string name="move_it_app_info">Move it App can change date
+        of your calendar\'s events when you miss one of them
+    </string>
+    <string name="move_it_app_action">Click button below to start work with app</string>
 </resources>
